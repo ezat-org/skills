@@ -2,7 +2,7 @@
 name: ezat-router
 description: "Use when setting up or debugging any tool, SDK or code that calls AI models through EZAT Router (ezat_sk_ API keys): Claude Code, the Anthropic or OpenAI SDKs, Cursor, Cline, LangChain or plain HTTP. Covers API keys, base URLs, choosing models, balance and billing, and errors such as 401, 402, 404, 429 and 529."
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # EZAT Router
@@ -55,4 +55,4 @@ This skill is a copy and doesn't update itself. The live docs are newer:
 - `https://docs.router.ezat.io/<page>.md`: any page as Markdown, for example `https://docs.router.ezat.io/troubleshooting.md`.
 - `https://docs.router.ezat.io/llms-full.txt`: every page in one file.
 - `https://docs.router.ezat.io/openapi.yaml`: the API spec.
-- Latest copy of this skill: `https://docs.router.ezat.io/skill/ezat-router.zip` (this is version 1.0.0).
+- Latest copy of this skill: `https://docs.router.ezat.io/skill/ezat-router.zip` (this is version 1.1.0). The same skill is in the GitHub repository `ezat-org/skills`: Claude Code installs it as the plugin `ezat-router@ezat`, and other agents with `npx skills add ezat-org/skills`.
