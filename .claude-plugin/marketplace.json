@@ -1,0 +1,20 @@
+{
+  "name": "ezat",
+  "description": "Agent skills for EZAT Router: AI models through one API key and one prepaid balance.",
+  "owner": {
+    "name": "EZAT",
+    "url": "https://router.ezat.io"
+  },
+  "plugins": [
+    {
+      "name": "ezat-router",
+      "source": "./",
+      "description": "Set up and debug tools, SDKs and code that call AI models through EZAT Router: API keys, base URLs, Claude Code, the Anthropic and OpenAI SDKs, models, billing and errors.",
+      "homepage": "https://docs.router.ezat.io/agents/skill",
+      "repository": "https://github.com/ezat-org/skills",
+      "license": "MIT",
+      "keywords": ["ezat", "ezat-router", "api", "claude-code", "openai", "anthropic"],
+      "category": "development"
+    }
+  ]
+}

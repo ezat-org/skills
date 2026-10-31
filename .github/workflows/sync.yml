@@ -1,0 +1,60 @@
+# Copies the published skill from docs.router.ezat.io into skills/ and commits any change.
+# The skill's source is in the EZAT Router docs, which fill in the prod URLs when they build it.
+name: Sync skill
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Download the published skill
+        run: |
+          curl -fsSL --retry 3 https://docs.router.ezat.io/skill/ezat-router.zip -o "$RUNNER_TEMP/skill.zip"
+          mkdir "$RUNNER_TEMP/skill"
+          unzip -q "$RUNNER_TEMP/skill.zip" -d "$RUNNER_TEMP/skill"
+
+      - name: Check it is the prod build
+        run: |
+          dir="$RUNNER_TEMP/skill/ezat-router"
+          test -f "$dir/SKILL.md" || { echo "::error::ezat-router/SKILL.md is missing from the zip"; exit 1; }
+          if grep -rnE '\{\{ *[a-zA-Z]+ *\}\}' "$dir"; then echo "::error::unfilled placeholder"; exit 1; fi
+          if grep -rn 'uat\.ezat\.io' "$dir"; then echo "::error::uat URL in the skill"; exit 1; fi
+          grep -q 'https://api.router.ezat.io' "$dir/SKILL.md" || { echo "::error::SKILL.md has no prod API URL"; exit 1; }
+
+      - name: Commit any change
+        run: |
+          rm -rf skills/ezat-router
+          mkdir -p skills
+          cp -R "$RUNNER_TEMP/skill/ezat-router" skills/
+          git add -A skills
+          if git diff --cached --quiet; then
+            echo "No change."
+            exit 0
+          fi
+          version=$(sed -n 's/^  version: "\(.*\)"$/\1/p' skills/ezat-router/SKILL.md)
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -m "Sync ezat-router skill ${version} from docs.router.ezat.io"
+          git push
+
+      # GitHub turns off scheduled workflows in a public repository after 60 days without activity.
+      - name: Keep the schedule on
+        run: |
+          idle=$(( $(date +%s) - $(git log -1 --format=%ct) ))
+          if [ "$idle" -gt $(( 50 * 86400 )) ]; then
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit --allow-empty -m "Keep the hourly sync on"
+            git push
+          fi
