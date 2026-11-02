@@ -58,7 +58,7 @@ Add `"stream": true` for Server-Sent Events in Anthropic's format (`message_star
 | Endpoint | Notes |
 | --- | --- |
 | `POST /v1/messages` | Streaming and not. `model`, `max_tokens` and `messages` are required; every other field goes to the model unchanged. |
-| `POST /v1/messages/count_tokens` | Free and not billed; counts toward the key's requests per minute. |
+| `POST /v1/messages/count_tokens` | Free and not billed; counts toward the key's requests per minute. Only for models with `capabilities.countTokens` in `GET https://api.router.ezat.io/api/models`; other models get a 400 naming the ones that can. A response's `usage.input_tokens` gives the real count for any model. |
 | `GET /v1/models` | The models this key can call. |
 
 ## Details that matter

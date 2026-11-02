@@ -10,7 +10,7 @@
 
 | Status | Type (OpenAI type or code) | Common messages and causes | Retry? |
 | --- | --- | --- | --- |
-| 400 | `invalid_request_error` | A required field is missing (`model`, `max_tokens`, `messages`), the body isn't valid JSON, or the model rejected a field or value; on the OpenAI API, a refused field (`openai.md`) | No. Fix the request. |
+| 400 | `invalid_request_error` | A required field is missing (`model`, `max_tokens`, `messages`), the body isn't valid JSON, or the model rejected a field or value; `count_tokens` for a model without `capabilities.countTokens`; on the OpenAI API, a refused field (`openai.md`) | No. Fix the request. |
 | 401 | `authentication_error` (`invalid_api_key`) | `Missing API key…`, `Invalid API key`, `This API key has been revoked`, `This API key has expired` | No. Check the key (`quickstart.md`). |
 | 402 | `billing_error` (`insufficient_quota`) | `Your credit balance is too low…` (no credit), or `This API key reached its … spend limit …` | No. The user adds credit or uses another key. |
 | 403 | `permission_error` | `This API key is not allowed to use …` (key's model list), `This organization is suspended…` | No. |
